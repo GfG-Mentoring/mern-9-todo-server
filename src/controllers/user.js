@@ -1,6 +1,7 @@
 const { Router } = require('express');
 const { createUser, checkUserExists } = require('../services/user');
 const { comparePassword } = require('../utils/password');
+const { generateToken } = require('../utils/token');
 
 const userRouter = Router();
 
@@ -76,13 +77,12 @@ userRouter.post('/login', async (req, res) => {
     return res.status(401).send('Invalid password.');
   }
 
+  const token = generateToken(user._id);
+
   return res.status(200).send({
     message: 'Login successful',
     data: {
-      id: user._id,
-      fullName: user.fullName,
-      email: user.email,
-      profilePicture: user.profilePicture,
+      token: token,
     },
   });
 });

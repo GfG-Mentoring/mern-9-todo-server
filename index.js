@@ -6,6 +6,7 @@ const { connectToDatabase } = require('./src/models');
 
 const userRouter = require('./src/controllers/user');
 const todoRouter = require('./src/controllers/todo');
+const { checkAuth } = require('./src/middleware/checkAuth');
 
 const server = express();
 
@@ -14,7 +15,7 @@ server.use(express.json());
 
 server.use('/auth', userRouter);
 
-server.use('/todos', todoRouter);
+server.use('/todos', checkAuth, todoRouter);
 
 server.listen(3000, async () => {
   console.log('Connecting to the database...');

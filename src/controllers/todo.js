@@ -15,7 +15,7 @@ todoRouter.post('/', async (req, res) => {
   }
 
   try {
-    const todo = await createTodo(todoItem);
+    const todo = await createTodo(todoItem, req.user.id);
     res.send({
       message: 'Todo item created successfully',
       data: todo,
@@ -34,7 +34,7 @@ todoRouter.get('/', async (req, res) => {
   try {
     // skip items based on the page number and limit
     // For example, if page is 2 and limit is 10, skip will be 10
-    const todos = await getAllTodos(limit, (page - 1) * limit);
+    const todos = await getAllTodos(limit, (page - 1) * limit, req.user.id);
     res.send({
       message: 'Todo items fetched successfully',
       data: todos,
@@ -56,7 +56,7 @@ todoRouter.get('/:id', async (req, res) => {
   }
 
   try {
-    const todo = await getTodoById(todoId);
+    const todo = await getTodoById(todoId, req.user.id);
     if (!todo) {
       return res.status(404).send('Todo item not found');
     }
